@@ -25,12 +25,10 @@ public class PlayerService {
 	//Get player by ID
 	public Player getPlayerById(int id) {
 		Optional<Player> tempPlayer = repo.findById(id);
-		Player p = null;
-		// if the Optional has a value, get it
-		if (tempPlayer.isPresent()) {
-			p = tempPlayer.get();
+		if (tempPlayer.isEmpty()) {
+			throw new PlayerNotFoundException("Player with id [" + id + "] not found");
 		}
-		return p;
+		return tempPlayer.get();
 	}
 	
 	//Add a player
@@ -42,7 +40,7 @@ public class PlayerService {
 	public Player updatePlayer(int id, Player p) {
 		Optional<Player> tempPlayer = repo.findById(id);
 		if (tempPlayer.isEmpty()) {
-			throw new RuntimeException("Player with id [" + id + "] not found");
+			throw new PlayerNotFoundException("Player with id [" + id + "] not found");
 		}
 		p.setId(id);
 		return repo.save(p);
@@ -61,7 +59,7 @@ public class PlayerService {
 			});
 		}
 		else {
-			throw new RuntimeException("Player with id [" + id + "] not found");
+			throw new PlayerNotFoundException("Player with id [" + id + "] not found");
 		}
 		
 		return repo.save(temp.get());
@@ -72,7 +70,7 @@ public class PlayerService {
 	public void updateTitles(int id, int titles) {
 		Optional<Player> temp = repo.findById(id);
 		if (temp.isEmpty()) {
-			throw new RuntimeException("Player with id [" + id + "] not found");
+			throw new PlayerNotFoundException("Player with id [" + id + "] not found");
 		}
 		repo.updateTitles(id, titles);
 	}
@@ -82,7 +80,7 @@ public class PlayerService {
 		Optional<Player> temp = repo.findById(id);
 		
 		if (temp.isEmpty()) {
-			throw new RuntimeException("Player with id [" + id + "] not found");
+			throw new PlayerNotFoundException("Player with id [" + id + "] not found");
 		}
 		
 		repo.delete(temp.get());
