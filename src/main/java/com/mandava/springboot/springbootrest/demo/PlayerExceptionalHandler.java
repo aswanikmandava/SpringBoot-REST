@@ -22,5 +22,17 @@ public class PlayerExceptionalHandler {
 		return new ResponseEntity<PlayerErrorResponse>(error, HttpStatus.NOT_FOUND);
 		
 	}
+	
+	@ExceptionHandler
+	public ResponseEntity<PlayerErrorResponse> genericHandler(Exception ex, HttpServletRequest req) {
+		PlayerErrorResponse error = new PlayerErrorResponse(
+				ZonedDateTime.now(), 
+				HttpStatus.BAD_REQUEST.value(), 
+				req.getRequestURI(), 
+				ex.getMessage());
+		
+		return new ResponseEntity<PlayerErrorResponse>(error, HttpStatus.BAD_REQUEST);
+		
+	}
 
 }
